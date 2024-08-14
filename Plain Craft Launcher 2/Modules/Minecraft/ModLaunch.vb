@@ -717,12 +717,20 @@ LoginFinish:
                 New JProperty("username", Data.Input.UserName),
                 New JProperty("password", Data.Input.Password),
                 New JProperty("requestUser", True))
+
+            ' 添加 Accept-Language: zh_CN 请求头
+            Dim headers As New Dictionary(Of String, String) From {
+                {"Accept-Language", "zh_CN"}
+            }
+
             Dim LoginJson As JObject = GetJson(NetRequestRetry(
                 Url:=Data.Input.BaseUrl & "/authenticate",
                 Method:="POST",
                 Data:=RequestData.ToString(0),
-                ContentType:="application/json; charset=utf-8"))
-            '检查登录结果
+                ContentType:="application/json; charset=utf-8",
+                Headers:=headers)) ' 传入自定义的 headers
+
+            ' 检查登录结果
             If LoginJson("availableProfiles").Count = 0 Then
                 If Data.Input.ForceReselectProfile Then Hint("你还没有创建角色，无法更换！", HintType.Critical)
                 Throw New Exception("$你还没有创建角色，请在创建角色后再试！")
@@ -781,19 +789,11 @@ LoginFinish:
             Dim AllMessage As String = GetExceptionSummary(ex)
             Log(ex, "登录失败原始错误信息", LogLevel.Normal)
             If AllMessage.Contains("403") Then
-                Select Case Data.Input.Type
-                    Case McLoginType.Auth
-                        Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf &
-                                            " - 输入的账号或密码错误。" & vbCrLf &
-                                            " - 登录尝试过于频繁，导致被暂时屏蔽。请不要操作，等待 10 分钟后再试。" & vbCrLf &
-                                            " - 只注册了账号，但没有在皮肤站新建角色。")
-                    Case McLoginType.Nide
-                        Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf &
-                                            " - 输入的账号或密码错误。" & vbCrLf &
-                                            " - 密码错误次数过多，导致被暂时屏蔽。请不要操作，等待 10 分钟后再试。" & vbCrLf &
-                                            If(Data.Input.UserName.Contains("@"), "", " - 登录账号应为邮箱或统一通行证账号，而非游戏角色 ID。" & vbCrLf) &
-                                            " - 只注册了账号，但没有加入对应服务器。")
-                End Select
+                ' 解析并打印服务器返回的错误 JSON 数据
+                Throw New Exception("登录失败：" & vbCrLf &
+                                        "错误代码: " & LoginJson("error").ToString & vbCrLf &
+                                        "错误信息: " & LoginJson("errorMessage").ToString & vbCrLf &
+                                        "错误原因: " & & LoginJson("cause").ToString  & vbCrLf)y
             ElseIf AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout") OrElse AllMessage.Contains("网络请求失败") Then
                 Throw New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查你的网络状况是否良好，或尝试使用 VPN！")
             ElseIf ex.Message.StartsWithF("$") Then
