@@ -311,10 +311,10 @@ Public Module ModMinecraft
                             Else
                                 ReleaseTime = JsonObject("releaseTime").ToObject(Of Date)
                             End If
-                            If ReleaseTime.Year > 2000 AndAlso ReleaseTime.Year < 2013 Then
-                                _Version.McName = "Old"
-                                GoTo VersionSearchFinish
-                            End If
+                        If ReleaseTime.Year > 2000 AndAlso (ReleaseTime.Year < 2011 OrElse (ReleaseTime.Year = 2011 AndAlso ReleaseTime.Month < 9) OrElse (ReleaseTime.Year = 2011 AndAlso ReleaseTime.Month = 9 AndAlso ReleaseTime.Day <= 20)) Then ' 2000 年到 2011 年 9 月 20 日之间
+                            _Version.McName = "Old"
+                            GoTo VersionSearchFinish
+                        End If
                         Catch
                             ReleaseTime = New Date(1970, 1, 1, 15, 0, 0)
                         End Try
