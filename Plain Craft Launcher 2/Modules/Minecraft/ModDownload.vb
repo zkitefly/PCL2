@@ -997,8 +997,7 @@
                 Versions.Add(New DlLiteLoaderListEntry With {
                              .Inherit = Pair.Key,
                              .IsLegacy = Pair.Key.Split(".")(1) < 8,
-                             .IsPreview = RealEntry("stream").ToString.ToLower =             Versions.Merge(UnlistedJson("versions"))
-,
+                             .IsPreview = RealEntry("stream").ToString.ToLower = "snapshot",
                              .FileName = "liteloader-installer-" & Pair.Key & If(Pair.Key = "1.8" OrElse Pair.Key = "1.9", ".0", "") & "-00-SNAPSHOT.jar",
                              .MD5 = RealEntry("md5"),
                              .ReleaseTime = GetLocalTime(GetDate(RealEntry("timestamp"))).ToString("yyyy'/'MM'/'dd HH':'mm"),
