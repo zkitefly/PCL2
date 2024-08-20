@@ -208,9 +208,9 @@
             '从指定URL获取并添加未列出的版本
             Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://zkitefly.github.io/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
             ' 替换 "pending" 为 "snapshot"
-            For Each versionm As JObject In UnlistedJson("versions")
-                If versionm("type").ToString() = "pending" OrElse versionm("id").ToString().StartsWithF("2point0") AndAlso versionm("type").ToString() = "release" Then
-                    versionm("type") = "snapshot"
+            For Each versionuvmc As JObject In UnlistedJson("versions")
+                If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("id").ToString().StartsWithF("2point0") AndAlso versionuvmc("type").ToString() = "release" Then
+                    versionuvmc("type") = "snapshot"
                 End If
             Next
             Versions.Merge(UnlistedJson("versions"))
@@ -246,9 +246,9 @@
             '从指定URL获取并添加未列出的版本
             Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main/version_manifest.json", IsJson:=True)
             ' 替换 "pending" 为 "snapshot"
-            For Each versionm As JObject In UnlistedJson("versions")
-                If versionm("type").ToString() = "pending" OrElse versionm("id").ToString().StartsWithF("2point0") AndAlso versionm("type").ToString() = "release" Then
-                    versionm("type") = "snapshot"
+            For Each versionuvmc As JObject In UnlistedJson("versions")
+                If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("id").ToString().StartsWithF("2point0") AndAlso versionuvmc("type").ToString() = "release" Then
+                    versionuvmc("type") = "snapshot"
                 End If
             Next
             Versions.Merge(UnlistedJson("versions"))
@@ -997,7 +997,8 @@
                 Versions.Add(New DlLiteLoaderListEntry With {
                              .Inherit = Pair.Key,
                              .IsLegacy = Pair.Key.Split(".")(1) < 8,
-                             .IsPreview = RealEntry("stream").ToString.ToLower = "snapshot",
+                             .IsPreview = RealEntry("stream").ToString.ToLower =             Versions.Merge(UnlistedJson("versions"))
+,
                              .FileName = "liteloader-installer-" & Pair.Key & If(Pair.Key = "1.8" OrElse Pair.Key = "1.9", ".0", "") & "-00-SNAPSHOT.jar",
                              .MD5 = RealEntry("md5"),
                              .ReleaseTime = GetLocalTime(GetDate(RealEntry("timestamp"))).ToString("yyyy'/'MM'/'dd HH':'mm"),
