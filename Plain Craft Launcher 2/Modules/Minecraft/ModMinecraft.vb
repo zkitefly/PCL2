@@ -1031,11 +1031,11 @@ ExitDataLoad:
         Name = Name.ToLower
         If Name.StartsWith("2.0") OrElse Name.StartsWith("2point0") Then
             Dim Teg = ""
-            If Name.StartsWith("red") Then
+            If Name.EndsWith("red") Then
                 Teg = "（红色版本）"
-            ElseIf Name.StartsWith("blue") Then
+            ElseIf Name.EndsWith("blue") Then
                 Teg = "（蓝色版本）"
-            ElseIf Name.StartsWith("purple") Then
+            ElseIf Name.EndsWith("purple") Then
                 Teg = "（紫色版本）"
             End If
             Return Teg & "这个秘密计划了两年的更新将游戏推向了一个新高度！"
