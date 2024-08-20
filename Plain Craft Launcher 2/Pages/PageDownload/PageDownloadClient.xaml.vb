@@ -34,7 +34,7 @@
                         End If
                         '愚人节版本
                         Select Case Version("id").ToString.ToLower
-                            Case "2point0_blue", "2point0_red", "2point0_purple"
+                            Case "2point0_blue", "2point0_red", "2point0_purple" "2.0_blue", "2.0_red", "2.0_purple" 
                                 Type = "愚人节版"
                                 Version("id") = Version("id").ToString().Replace("point", ".")
                                 Version("type") = "special"
