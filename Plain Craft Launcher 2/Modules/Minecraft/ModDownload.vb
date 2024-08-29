@@ -258,7 +258,7 @@
                 Next
                 Versions.Merge(UnlistedJson("versions"))
             Catch ex As Exception
-                Log("[Download] 未列出的版本镜像源加载失败: ", ex)
+                Log("[Download] 未列出的版本镜像源加载失败: " & ex.Message)
             End Try
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Json}
